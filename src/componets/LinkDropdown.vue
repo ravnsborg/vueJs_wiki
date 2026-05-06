@@ -47,6 +47,7 @@ import { getLinks } from '@/api.js'
 const links = ref([])
 
 onMounted(async () => {
-  links.value = await getLinks()
+  const { data } = await getLinks()
+  links.value = data
 })
 </script>

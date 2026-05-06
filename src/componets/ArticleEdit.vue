@@ -35,10 +35,9 @@
           <button
             type="submit"
             :disabled="isSubmitting"
-            @click="$emit('save', form)"
             class="px-8 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
-            {{ isSubmitting ? 'Sending...' : 'Save Article' }}
+            {{ isSubmitting ? 'Saving...' : 'Save Article' }}
           </button>
         </div>
       </div>
@@ -55,8 +54,11 @@ const isSubmitting = ref(false)
 const categories = ref([])
 
 onMounted(async () => {
-  categories.value = await getCategories()
+  const { data } = await getCategories()
+  categories.value = data
+})
 
+onMounted(async () => {
   const { data } = await getCategories(form)
   categories.value = data
 })
@@ -73,12 +75,7 @@ const form = reactive({
 
 async function save() {
   isSubmitting.value = true
-  console.log(JSON.stringify(form))
-
-  const { status, data } = await updateArticle(form)
-  if (status === 201) {
-    console.log('success')
-  }
+  const { data } = await updateArticle(form)
   isSubmitting.value = false
   emit('edit', data.article)
 }

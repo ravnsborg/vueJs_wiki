@@ -10,10 +10,10 @@
       <ArticleCard
         v-if="editingId !== article.id"
         :article="article"
-        @edit="edit(article)"
+        @edit="openEdit(article)"
         @toggle-favorite="updateFavorite"
       />
-      <ArticleEdit v-else :article="article" @edit="edit(article)" />
+      <ArticleEdit v-else :article="article" @edit="closeEdit" />
     </div>
   </div>
 </template>
@@ -67,11 +67,20 @@ watch(
     }
   },
 )
+
 function updateFavorite(article) {
   article.is_favorite = !article.is_favorite
 }
 
-function edit(article) {
+function openEdit(article) {
   editingId.value = editingId.value === article.id ? null : article.id
+}
+
+function closeEdit(updatedArticle = null) {
+  if (updatedArticle?.id) {
+    const index = articles.value.findIndex((a) => a.id === updatedArticle.id)
+    if (index !== -1) articles.value.splice(index, 1, updatedArticle)
+  }
+  editingId.value = null
 }
 </script>

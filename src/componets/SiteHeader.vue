@@ -2,13 +2,17 @@
 import ArticleSearch from './ArticleSearch.vue'
 import LinkDropdown from './LinkDropdown.vue'
 import EntityDropdown from './EntityDropdown.vue'
+
+const entityName = JSON.parse(localStorage.getItem('userTestKmr')).entity.title
+// import { ref } from 'vue'
+// const newObject = ref(JSON.parse(localStorage.getItem('user')))
 </script>
 
 <template>
   <header class="bg-blue-100 dark-primary w-full light-primary p-4 shadow-lg">
     <div class="flex items-center justify-between px-5">
       <!-- Logo/Title -->
-      <h1 class="text-2xl font-bold">Wiki Title</h1>
+      <h1 class="text-2xl font-bold">{{ entityName }} Wiki</h1>
 
       <!-- Search - Centered -->
       <div class="flex-1 flex justify-center mx-8">

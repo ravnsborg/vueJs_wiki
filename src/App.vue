@@ -9,6 +9,11 @@ const selectedCategoryId = ref(null)
 const selectedArticleId = ref(null)
 const keywords = ref('')
 
+import { useAuthStore } from './stores/auth'
+const authStore = useAuthStore()
+
+authStore.setUser()
+
 provide('keywordSearch', getSearchResultsByKeyword)
 function getSearchResultsByKeyword(keyword) {
   keywords.value = keyword

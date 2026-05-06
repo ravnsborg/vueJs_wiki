@@ -14,6 +14,9 @@ const client = axios.create({
 
 // Api wrapper
 async function apiCall(method, url, data = null) {
+  // const user = JSON.parse(localStorage.getItem('userTestKmr'))
+  // console.log('call api with entity id ' + user.preferred_entity_id)
+
   try {
     if (isRef(data)) {
       data = toRaw(data.value)
@@ -45,10 +48,12 @@ export const getLinks = () => apiCall('get', '/v1/links')
 
 export const getCategories = () => apiCall('get', '/v1/categories')
 
+export const getEntities = () => apiCall('get', '/v1/entities')
+
 export const getFavorites = () => apiCall('get', '/v1/articles/favorites')
 
 export const updateArticle = (data) => {
   const articleId = data.id
   delete data.id
-  return apiCall('put', `/v1/articles/${articleId}`, data)
+  return apiCall('put', `/v1/articles/${articleId}?include=category`, data)
 }

@@ -19,95 +19,19 @@
         class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-blue-400 outline-1 -outline-offset-1 outline-black/10"
       >
         <div class="py-1">
-          <MenuItem v-slot="{ active }">
+          <MenuItem v-for="entity in entities" :key="entity.id" v-slot="{ active }">
             <a
               href="#"
               :class="[
                 active
                   ? 'bg-gray-100 text-gray-900 outline-hidden dark:bg-white/5 dark:text-white'
                   : 'text-gray-700 dark:text-gray-300',
-                'block px-4 py-2 text-sm',
+                'flex items-center justify-between px-4 py-2 text-sm',
               ]"
-              >Edit</a
             >
-          </MenuItem>
-          <MenuItem v-slot="{ active }">
-            <a
-              href="#"
-              :class="[
-                active
-                  ? 'bg-gray-100 text-gray-900 outline-hidden dark:bg-white/5 dark:text-white'
-                  : 'text-gray-700 dark:text-gray-300',
-                'block px-4 py-2 text-sm',
-              ]"
-              >Duplicate</a
-            >
-          </MenuItem>
-        </div>
-        <div class="py-1">
-          <MenuItem v-slot="{ active }">
-            <a
-              href="#"
-              :class="[
-                active
-                  ? 'bg-gray-100 text-gray-900 outline-hidden dark:bg-white/5 dark:text-white'
-                  : 'text-gray-700 dark:text-gray-300',
-                'block px-4 py-2 text-sm',
-              ]"
-              >Archive</a
-            >
-          </MenuItem>
-          <MenuItem v-slot="{ active }">
-            <a
-              href="#"
-              :class="[
-                active
-                  ? 'bg-gray-100 text-gray-900 outline-hidden dark:bg-white/5 dark:text-white'
-                  : 'text-gray-700 dark:text-gray-300',
-                'block px-4 py-2 text-sm',
-              ]"
-              >Move</a
-            >
-          </MenuItem>
-        </div>
-        <div class="py-1">
-          <MenuItem v-slot="{ active }">
-            <a
-              href="#"
-              :class="[
-                active
-                  ? 'bg-gray-100 text-gray-900 outline-hidden dark:bg-white/5 dark:text-white'
-                  : 'text-gray-700 dark:text-gray-300',
-                'block px-4 py-2 text-sm',
-              ]"
-              >Share</a
-            >
-          </MenuItem>
-          <MenuItem v-slot="{ active }">
-            <a
-              href="#"
-              :class="[
-                active
-                  ? 'bg-gray-100 text-gray-900 outline-hidden dark:bg-white/5 dark:text-white'
-                  : 'text-gray-700 dark:text-gray-300',
-                'block px-4 py-2 text-sm',
-              ]"
-              >Add to favorites</a
-            >
-          </MenuItem>
-        </div>
-        <div class="py-1">
-          <MenuItem v-slot="{ active }">
-            <a
-              href="#"
-              :class="[
-                active
-                  ? 'bg-gray-100 text-gray-900 outline-hidden dark:bg-white/5 dark:text-white'
-                  : 'text-gray-700 dark:text-gray-300',
-                'block px-4 py-2 text-sm',
-              ]"
-              >Delete</a
-            >
+              <span>{{ entity.title }}</span>
+              <CheckIcon v-if="entityId === entity.id" class="h-6 text-red-600" />
+            </a>
           </MenuItem>
         </div>
       </MenuItems>
@@ -116,6 +40,17 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+import { getEntities } from '@/api'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { ChevronDownIcon } from '@heroicons/vue/20/solid'
+import { ChevronDownIcon, CheckIcon } from '@heroicons/vue/20/solid'
+
+const entityId = ref(JSON.parse(localStorage.getItem('userTestKmr')).preferred_entity_id)
+
+const entities = ref([])
+
+onMounted(async () => {
+  const { data } = await getEntities()
+  entities.value = data
+})
 </script>
