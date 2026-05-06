@@ -23,5 +23,6 @@ import { Plus } from 'lucide-vue-next'
 import { getFavorites } from '@/api'
 defineEmits(['articleId'])
 
-const favorites = ref(await getFavorites())
+const { data } = await getFavorites()
+const favorites = ref(data)
 </script>

@@ -26,5 +26,6 @@ import { getCategories } from '@/api'
 
 defineEmits(['categoryId'])
 
-const categories = ref(await getCategories())
+const { data } = await getCategories()
+const categories = ref(data)
 </script>

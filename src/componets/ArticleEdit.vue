@@ -34,10 +34,11 @@
           </button>
           <button
             type="submit"
+            :disabled="isSubmitting"
             @click="$emit('save', form)"
             class="px-8 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
-            Save Article
+            {{ isSubmitting ? 'Sending...' : 'Save Article' }}
           </button>
         </div>
       </div>
@@ -47,16 +48,21 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { getCategories } from '@/api'
+import { getCategories, updateArticle } from '@/api'
+
+const isSubmitting = ref(false)
 
 const categories = ref([])
 
 onMounted(async () => {
   categories.value = await getCategories()
+
+  const { data } = await getCategories(form)
+  categories.value = data
 })
 
 const props = defineProps(['article'])
-defineEmits(['save', 'edit'])
+const emit = defineEmits(['edit'])
 
 const form = reactive({
   id: props.article.id,
@@ -64,4 +70,16 @@ const form = reactive({
   body: props.article.body,
   category_id: props.article.category.id,
 })
+
+async function save() {
+  isSubmitting.value = true
+  console.log(JSON.stringify(form))
+
+  const { status, data } = await updateArticle(form)
+  if (status === 201) {
+    console.log('success')
+  }
+  isSubmitting.value = false
+  emit('edit', data.article)
+}
 </script>

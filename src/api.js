@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { isRef, isReactive, toRaw } from 'vue'
 
 export const API_URL = 'http://127.0.0.1:8000/api' //import.meta.env.VITE_API_URL
 export const API_KEY = 'keyNotUsed' //import.meta.env.VITE_API_KEY
@@ -14,8 +15,15 @@ const client = axios.create({
 // Api wrapper
 async function apiCall(method, url, data = null) {
   try {
+    if (isRef(data)) {
+      data = toRaw(data.value)
+    } else if (isReactive(data)) {
+      data = toRaw(data)
+    }
+    data = data ? JSON.stringify(data) : null
+
     const res = await client({ method, url, data })
-    return res.data
+    return { status: res.status, data: res.data }
   } catch (err) {
     console.log(err.response?.data?.message)
     console.log(err.response?.status)
@@ -38,3 +46,9 @@ export const getLinks = () => apiCall('get', '/v1/links')
 export const getCategories = () => apiCall('get', '/v1/categories')
 
 export const getFavorites = () => apiCall('get', '/v1/articles/favorites')
+
+export const updateArticle = (data) => {
+  const articleId = data.id
+  delete data.id
+  return apiCall('put', `/v1/articles/${articleId}`, data)
+}

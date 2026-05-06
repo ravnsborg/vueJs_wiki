@@ -34,7 +34,8 @@ watch(
   async (newId) => {
     if (newId === null) return
     try {
-      articles.value = await getArticlesByCategoryId(newId)
+      const { data } = await getArticlesByCategoryId(newId)
+      articles.value = data
     } catch (err) {
       console.error('Failed to load categories articles:', err)
     }
@@ -46,7 +47,8 @@ watch(
   async (newId) => {
     if (newId === null) return
     try {
-      articles.value = await getArticlesByArticleId(newId)
+      const { data } = await getArticlesByArticleId(newId)
+      articles.value = data
     } catch (err) {
       console.error('Failed to load a favorite article:', err)
     }
@@ -58,7 +60,8 @@ watch(
   async (searchTerm) => {
     if (!searchTerm) return
     try {
-      articles.value = await getArticlesByKeyword(searchTerm)
+      const { data } = await getArticlesByKeyword(searchTerm)
+      articles.value = data
     } catch (err) {
       console.error('Failed to load articles by keywords:', err)
     }
