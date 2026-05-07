@@ -1,40 +1,43 @@
 import axios from 'axios'
 import { isRef, isReactive, toRaw } from 'vue'
 
-export const API_URL = 'http://127.0.0.1:8000/api' //import.meta.env.VITE_API_URL
-export const API_KEY = 'keyNotUsed' //import.meta.env.VITE_API_KEY
+const apiBaseUrl = import.meta.env.VITE_API_ENDPOINT
+const apiAccessToken = localStorage.getItem('accessToken')
 
 const client = axios.create({
-  baseURL: API_URL,
+  baseURL: apiBaseUrl,
   headers: {
-    Authorization: `Bearer ${API_KEY}`,
+    Authorization: `Bearer ${apiAccessToken}`,
     'Content-Type': 'application/json',
   },
 })
 
 // Api wrapper
 async function apiCall(method, url, data = null) {
-  // const user = JSON.parse(localStorage.getItem('userTestKmr'))
-  // console.log('call api with entity id ' + user.preferred_entity_id)
-
   try {
-    if (isRef(data)) {
-      data = toRaw(data.value)
-    } else if (isReactive(data)) {
-      data = toRaw(data)
-    }
-    data = data ? JSON.stringify(data) : null
+    let payload = data
 
-    const res = await client({ method, url, data })
+    if (isRef(payload)) {
+      payload = toRaw(payload.value)
+    } else if (isReactive(payload)) {
+      payload = toRaw(payload)
+    }
+
+    const res = await client({
+      method,
+      url,
+      data: payload,
+    })
+
     return { status: res.status, data: res.data }
   } catch (err) {
-    console.log(err.response?.data?.message)
-    console.log(err.response?.status)
-    throw err // re-throw so the caller can handle it if needed
+    console.error('Response Error:', err.response?.data)
+    throw err
   }
 }
 
-// Api calls
+export const login = (credentials) => apiCall('post', '/login', credentials)
+
 export const getArticlesByKeyword = (keyword) =>
   apiCall('get', `/v1/articles/search?q=${encodeURIComponent(keyword)}`)
 
