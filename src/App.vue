@@ -1,5 +1,5 @@
 <script setup>
-import { ref, provide, onMounted } from 'vue'
+import { ref, provide } from 'vue'
 import SiteHeader from './componets/SiteHeader.vue'
 import ArticleFeed from './componets/ArticleFeed.vue'
 import CategoryCard from './componets/CategoryCard.vue'
@@ -26,22 +26,6 @@ function getSelectedCategoryId(id) {
 function getSelectedArticleId(id) {
   selectedArticleId.value = id
 }
-
-// **************************************************************
-// Temporary to login for now to get access token generated
-// **************************************************************
-import { login } from './api'
-onMounted(async () => {
-  const { status, data } = await login({
-    email: 'ravnsborg@gmail.com',
-    password: 'tanner55',
-  })
-  if (status === 200) {
-    localStorage.setItem('accessToken', data.access_token)
-  } else {
-    localStorage.removeItem('accessToken')
-  }
-})
 </script>
 
 <template>

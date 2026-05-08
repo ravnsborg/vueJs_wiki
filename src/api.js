@@ -2,12 +2,12 @@ import axios from 'axios'
 import { isRef, isReactive, toRaw } from 'vue'
 
 const apiBaseUrl = import.meta.env.VITE_API_ENDPOINT
-const apiAccessToken = localStorage.getItem('accessToken')
+// const apiAccessToken = localStorage.getItem('accessToken')
 
 const client = axios.create({
   baseURL: apiBaseUrl,
   headers: {
-    Authorization: `Bearer ${apiAccessToken}`,
+    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     'Content-Type': 'application/json',
   },
 })
@@ -37,6 +37,8 @@ async function apiCall(method, url, data = null) {
 }
 
 export const login = (credentials) => apiCall('post', '/login', credentials)
+
+export const getCurrentUser = () => apiCall('get', '/v1/user')
 
 export const getArticlesByKeyword = (keyword) =>
   apiCall('get', `/v1/articles/search?q=${encodeURIComponent(keyword)}`)

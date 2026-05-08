@@ -1,26 +1,30 @@
 import { defineStore } from 'pinia'
-
+import { login, getCurrentUser } from '@/api'
 import { ref } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const entityId = ref(null)
 
-  function setUser() {
-    const userData = {
-      id: 2,
-      name: 'Kevin Ravnsborg',
-      preferred_entity_id: 2,
-      entity: {
-        id: 1,
-        title: 'Walks',
-        user_id: 2,
-        created_at: '2025-12-05T20:30:02.000000Z',
-        updated_at: '2025-12-05T20:30:02.000000Z',
-      },
-    }
+  async function setUser() {
+    // **************************************************************
+    // Temporary to login for now to get access token generated
+    // **************************************************************
+    const { status, data } = await login({
+      email: 'ravnsborg@gmail.com',
+      password: 'tanner55',
+    })
+    console.log('....................')
+    console.log(status)
+    if (status === 200) {
+      localStorage.setItem('accessToken', data.access_token)
 
-    localStorage.setItem('userTestKmr', JSON.stringify(userData))
+      const { data: userData1 } = await getCurrentUser()
+      console.log(userData1)
+      localStorage.setItem('userTestKmr', JSON.stringify(userData1.user))
+    } else {
+      localStorage.removeItem('accessToken')
+    }
   }
 
   function getUser() {
