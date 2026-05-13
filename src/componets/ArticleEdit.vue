@@ -58,11 +58,6 @@ onMounted(async () => {
   categories.value = data
 })
 
-onMounted(async () => {
-  const { data } = await getCategories(form)
-  categories.value = data
-})
-
 const props = defineProps(['article'])
 const emit = defineEmits(['edit'])
 

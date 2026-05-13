@@ -1,7 +1,7 @@
 <template>
   <Menu as="div" class="relative inline-block">
     <MenuButton
-      class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-blue-500 px-3 py-2 text-sm text-white inset-ring-1 inset-ring-white/5 hover:bg-blue-400"
+      class="cursor-pointer inline-flex w-full justify-center gap-x-1.5 rounded-md bg-blue-500 px-3 py-2 text-sm text-white inset-ring-1 inset-ring-white/5 hover:bg-blue-400"
     >
       Links
       <ChevronDownIcon class="-mr-1 size-5" aria-hidden="true" />

@@ -1,7 +1,7 @@
 <template>
   <Menu as="div" class="relative inline-block">
     <MenuButton
-      class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-blue-500 px-3 py-2 text-sm text-white inset-ring-1 inset-ring-white/5 hover:bg-blue-400"
+      class="cursor-pointer inline-flex w-full justify-center gap-x-1.5 rounded-md bg-blue-500 px-3 py-2 text-sm text-white inset-ring-1 inset-ring-white/5 hover:bg-blue-400"
     >
       Entities
       <ChevronDownIcon class="-mr-1 size-5" aria-hidden="true" />
@@ -28,11 +28,22 @@
                   : 'text-gray-700 dark:text-gray-300',
                 'flex items-center justify-between px-4 py-2 text-sm',
               ]"
+              @click="setDefaultEntity(entity)"
             >
-              <span>{{ entity.title }}</span>
+              {{ entity.title }}
               <CheckIcon v-if="entityId === entity.id" class="h-6 text-red-600" />
             </a>
           </MenuItem>
+          <div class="p-3" @click.stop>
+            <input
+              type="text"
+              placeholder="Add new Entity"
+              v-model="newEntityTitle.title"
+              class="border border-gray-300 bg-white block w-full"
+              @keyup.enter="addNewEntity(entity)"
+              @keydown.stop
+            />
+          </div>
         </div>
       </MenuItems>
     </transition>
@@ -40,17 +51,36 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { getEntities } from '@/api'
+import { ref, reactive, onMounted } from 'vue'
+import { getEntities, newEntity, updateUserEntityId } from '@/api'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { ChevronDownIcon, CheckIcon } from '@heroicons/vue/20/solid'
-
-const entityId = ref(JSON.parse(localStorage.getItem('userTestKmr')).preferred_entity_id)
+import { getEntityStorage, setEntityStorage } from '@/store/auth'
+const entityId = ref(getEntityStorage()?.id)
 
 const entities = ref([])
+const newEntityTitle = reactive({
+  title: '',
+})
 
 onMounted(async () => {
   const { data } = await getEntities()
   entities.value = data
 })
+
+async function setDefaultEntity(entity) {
+  if (entityId.value !== entity.id) {
+    await updateUserEntityId(entity.id)
+    setEntityStorage(entity)
+    window.location.reload()
+  }
+}
+
+async function addNewEntity() {
+  const { data } = await newEntity(newEntityTitle)
+  entityId.value = data.id
+  entities.value.push(data)
+  setEntityStorage(data)
+  window.location.reload()
+}
 </script>

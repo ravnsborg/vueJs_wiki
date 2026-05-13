@@ -2,10 +2,10 @@
 import ArticleSearch from './ArticleSearch.vue'
 import LinkDropdown from './LinkDropdown.vue'
 import EntityDropdown from './EntityDropdown.vue'
+import { Plus } from 'lucide-vue-next'
+import { getEntityStorage, userLogout } from '@/store/auth'
 
-const entityName = JSON.parse(localStorage.getItem('userTestKmr')).entity.title
-// import { ref } from 'vue'
-// const newObject = ref(JSON.parse(localStorage.getItem('user')))
+const entityName = getEntityStorage()?.title
 </script>
 
 <template>
@@ -22,13 +22,19 @@ const entityName = JSON.parse(localStorage.getItem('userTestKmr')).entity.title
       <!-- Right Side -->
       <div class="flex items-center gap-4">
         <button
-          class="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm text-white hover:bg-blue-400"
+          class="cursor-pointer inline-flex justify-center rounded-md bg-blue-500 px-3 py-2 text-sm text-white hover:bg-blue-400"
         >
-          <i class="fa-solid fa-plus"></i> Create New Article
+          <Plus class="w-4 h-5 text-white-500" />New Article
         </button>
 
         <LinkDropdown />
         <EntityDropdown />
+        <button
+          class="inline-flex justify-center px-3 py-2 text-md underline text-black cursor-pointer"
+          @click="userLogout()"
+        >
+          Logout
+        </button>
       </div>
     </div>
   </header>

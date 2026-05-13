@@ -22,7 +22,12 @@
 import { ref, watch } from 'vue'
 import ArticleCard from './ArticleCard.vue'
 import ArticleEdit from './ArticleEdit.vue'
-import { getArticlesByCategoryId, getArticlesByArticleId, getArticlesByKeyword } from '@/api'
+import {
+  getArticlesByCategoryId,
+  getArticlesByArticleId,
+  getArticlesByKeyword,
+  updateArticle,
+} from '@/api'
 
 const props = defineProps({ categoryId: Number, articleId: Number, keywords: String })
 
@@ -68,8 +73,11 @@ watch(
   },
 )
 
-function updateFavorite(article) {
+async function updateFavorite(article) {
   article.is_favorite = !article.is_favorite
+  article.category_id = article.category.id
+
+  await updateArticle(article)
 }
 
 function openEdit(article) {
