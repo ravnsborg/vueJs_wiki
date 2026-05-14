@@ -62,6 +62,8 @@ export const updateUserEntityId = (entityId) => {
 // ----------------------
 // Articles
 // ----------------------
+export const newArticle = (data) => apiCall('post', '/v1/articles', data)
+
 export const getArticlesByKeyword = (keyword) =>
   apiCall('get', `/v1/articles/search?q=${encodeURIComponent(keyword)}`)
 

@@ -2,25 +2,34 @@
   <div v-if="keywords" class="ml-1 mb-2">Results for: {{ props.keywords }}</div>
 
   <div class="max-w-6xl mx-auto space-y-4">
-    <div
-      class="bg-white rounded-xl shadow-md p-4 border border-gray-300"
-      v-for="article in articles"
-      :key="article.id"
-    >
-      <ArticleCard
-        v-if="editingId !== article.id"
-        :article="article"
-        @edit="openEdit(article)"
-        @delete="deleteArticleRec(article)"
-        @toggle-favorite="updateFavorite"
-      />
-      <ArticleEdit v-else :article="article" @edit="closeEdit" />
+    <ArticleEdit
+      v-if="showNewForm"
+      :article="null"
+      :showEmptyForm="true"
+      @edit="cancelNewArticle"
+      class="bg-white rounded-xl shadow-md p-4 border border-gray-300 mb-4"
+    />
+    <div v-else>
+      <div
+        v-for="article in articles"
+        :key="article.id"
+        class="bg-white rounded-xl shadow-md p-4 border border-gray-300 mb-4"
+      >
+        <ArticleCard
+          v-if="editingId !== article.id"
+          :article="article"
+          @edit="openEdit(article)"
+          @delete="deleteArticleRec(article)"
+          @toggle-favorite="updateFavorite"
+        />
+        <ArticleEdit v-else :article="article" :showEmptyForm="false" @edit="closeEdit" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, inject } from 'vue'
 import ArticleCard from './ArticleCard.vue'
 import ArticleEdit from './ArticleEdit.vue'
 import {
@@ -31,10 +40,28 @@ import {
   patchArticle,
 } from '@/api'
 
-const props = defineProps({ categoryId: Number, articleId: Number, keywords: String })
+const props = defineProps({
+  categoryId: Number,
+  articleId: Number,
+  keywords: String,
+  showArticleForm: Number,
+})
 
 const articles = ref([])
 const editingId = ref(null)
+const showNewForm = ref(false)
+
+function cancelNewArticle() {
+  showNewForm.value = false
+}
+
+watch(
+  () => props.showArticleForm,
+  () => {
+    showNewForm.value = true
+    editingId.value = null
+  },
+)
 
 watch(
   () => props.categoryId,

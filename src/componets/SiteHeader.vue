@@ -1,4 +1,5 @@
 <script setup>
+import { inject } from 'vue'
 import ArticleSearch from './ArticleSearch.vue'
 import LinkDropdown from './LinkDropdown.vue'
 import EntityDropdown from './EntityDropdown.vue'
@@ -6,6 +7,7 @@ import { Plus } from 'lucide-vue-next'
 import { getEntityStorage, userLogout } from '@/store/auth'
 
 const entityName = getEntityStorage()?.title
+const openNewArticle = inject('openNewArticle')
 </script>
 
 <template>
@@ -22,6 +24,7 @@ const entityName = getEntityStorage()?.title
       <!-- Right Side -->
       <div class="flex items-center gap-4">
         <button
+          @click="openNewArticle()"
           class="cursor-pointer inline-flex justify-center rounded-md bg-blue-500 px-3 py-2 text-sm text-white hover:bg-blue-400"
         >
           <Plus class="w-4 h-5 text-white-500" />New Article

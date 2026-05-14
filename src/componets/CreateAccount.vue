@@ -87,7 +87,7 @@ async function createAccount() {
     isCreatingAccount.value = false
     router.push('/login')
   } catch (e) {
-    console.log('Exception on login: ', e)
+    console.log('Exception occurred: ', e)
     error.value = e.response?.data?.message
   }
   isCreatingAccount.value = false

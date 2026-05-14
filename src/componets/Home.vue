@@ -8,11 +8,17 @@ import FavoriteCard from './FavoriteCard.vue'
 const selectedCategoryId = ref(null)
 const selectedArticleId = ref(null)
 const keywords = ref('')
+const showArticleForm = ref(0)
 
-provide('keywordSearch', getSearchResultsByKeyword)
 function getSearchResultsByKeyword(keyword) {
   keywords.value = keyword
 }
+provide('keywordSearch', getSearchResultsByKeyword)
+
+function openNewArticle() {
+  showArticleForm.value++
+}
+provide('openNewArticle', openNewArticle)
 
 function getSelectedCategoryId(id) {
   selectedCategoryId.value = id
@@ -39,6 +45,7 @@ function getSelectedArticleId(id) {
             :categoryId="selectedCategoryId"
             :articleId="selectedArticleId"
             :keywords="keywords"
+            :showArticleForm="showArticleForm"
           />
         </main>
       </div>
