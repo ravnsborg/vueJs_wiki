@@ -17,12 +17,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject, watch } from 'vue'
 import { getFavorites } from '@/api'
 defineEmits(['articleId'])
 
 const favorites = ref([])
 
+const updatedArticle = inject('updatedArticle', null)
+
+if (updatedArticle) {
+  watch(updatedArticle, (article) => {
+    if (!article) return
+
+    const index = favorites.value.findIndex((f) => f.id === article.id)
+
+    if (article.is_favorite) {
+      // Add to favorites if not already there
+      if (index === -1) {
+        favorites.value.push(article)
+      } else {
+        // Update existing entry in case other fields changed
+        favorites.value.splice(index, 1, article)
+      }
+    } else {
+      // Remove from favorites
+      if (index !== -1) favorites.value.splice(index, 1)
+    }
+  })
+}
 onMounted(async () => {
   const { data } = await getFavorites()
   favorites.value = data ?? []

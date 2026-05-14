@@ -10,6 +10,15 @@ const selectedArticleId = ref(null)
 const keywords = ref('')
 const showArticleForm = ref(0)
 
+const updatedArticle = ref(null)
+provide('updatedArticle', updatedArticle)
+
+// Provide the update function so ArticleFeed can set it
+function toggleArticleInFavoritesList(article) {
+  updatedArticle.value = article
+}
+provide('updateFavoritesList', toggleArticleInFavoritesList)
+
 function getSearchResultsByKeyword(keyword) {
   keywords.value = keyword
 }

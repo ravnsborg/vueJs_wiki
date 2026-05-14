@@ -102,11 +102,16 @@ watch(
   },
 )
 
+const updateFavoritesList = inject('updateFavoritesList')
+
 async function updateFavorite(article) {
   article.is_favorite = !article.is_favorite
 
   const data = { is_favorite: article.is_favorite }
   await patchArticle(article.id, data)
+
+  //pass a new article object with same properties to allow toggling to properly function
+  updateFavoritesList({ ...article })
 }
 
 function openEdit(article) {
