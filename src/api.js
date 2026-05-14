@@ -80,6 +80,12 @@ export const updateArticle = (data) => {
   return apiCall('put', `/v1/articles/${articleId}?include=category`, data)
 }
 
+export const patchArticle = (id, data) => {
+  return apiCall('patch', `/v1/articles/${id}?include=category`, data)
+}
+
+export const deleteArticle = (articleId) => apiCall('delete', '/v1/articles/' + articleId)
+
 // ----------------------
 // Categories
 // ----------------------

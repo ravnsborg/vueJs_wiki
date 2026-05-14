@@ -11,6 +11,7 @@
         v-if="editingId !== article.id"
         :article="article"
         @edit="openEdit(article)"
+        @delete="deleteArticleRec(article)"
         @toggle-favorite="updateFavorite"
       />
       <ArticleEdit v-else :article="article" @edit="closeEdit" />
@@ -26,7 +27,8 @@ import {
   getArticlesByCategoryId,
   getArticlesByArticleId,
   getArticlesByKeyword,
-  updateArticle,
+  deleteArticle,
+  patchArticle,
 } from '@/api'
 
 const props = defineProps({ categoryId: Number, articleId: Number, keywords: String })
@@ -75,9 +77,9 @@ watch(
 
 async function updateFavorite(article) {
   article.is_favorite = !article.is_favorite
-  article.category_id = article.category.id
 
-  await updateArticle(article)
+  const data = { is_favorite: article.is_favorite }
+  await patchArticle(article.id, data)
 }
 
 function openEdit(article) {
@@ -90,5 +92,12 @@ function closeEdit(updatedArticle = null) {
     if (index !== -1) articles.value.splice(index, 1, updatedArticle)
   }
   editingId.value = null
+}
+
+async function deleteArticleRec(article) {
+  if (confirm('Delete Article?') === true) {
+    await deleteArticle(article.id)
+    articles.value = articles.value.filter((item) => item.id !== article.id)
+  }
 }
 </script>
