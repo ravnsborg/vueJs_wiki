@@ -17,10 +17,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { getFavorites } from '@/api'
 defineEmits(['articleId'])
 
-const { data } = await getFavorites()
-const favorites = ref(data ?? [])
+const favorites = ref([])
+
+onMounted(async () => {
+  const { data } = await getFavorites()
+  favorites.value = data ?? []
+})
 </script>

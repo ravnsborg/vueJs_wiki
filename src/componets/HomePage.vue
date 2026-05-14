@@ -30,25 +30,23 @@ function getSelectedArticleId(id) {
 </script>
 
 <template>
-  <router-view>
-    <div class="bg-gray-200 h-screen">
-      <SiteHeader />
+  <div class="bg-gray-200 h-screen">
+    <SiteHeader />
 
-      <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
-        <aside class="w-65 p-4 pt-6 flex flex-col gap-4 dark-secondary">
-          <Suspense><CategoryCard @category-id="getSelectedCategoryId" /></Suspense>
-          <Suspense><FavoriteCard @articleId="getSelectedArticleId" /></Suspense>
-        </aside>
+    <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
+      <aside class="w-65 p-4 pt-6 flex flex-col gap-4 dark-secondary">
+        <CategoryCard @category-id="getSelectedCategoryId" />
+        <FavoriteCard @articleId="getSelectedArticleId" />
+      </aside>
 
-        <main class="flex-1 overflow-y-auto p-6">
-          <ArticleFeed
-            :categoryId="selectedCategoryId"
-            :articleId="selectedArticleId"
-            :keywords="keywords"
-            :showArticleForm="showArticleForm"
-          />
-        </main>
-      </div>
+      <main class="flex-1 overflow-y-auto p-6">
+        <ArticleFeed
+          :categoryId="selectedCategoryId"
+          :articleId="selectedArticleId"
+          :keywords="keywords"
+          :showArticleForm="showArticleForm"
+        />
+      </main>
     </div>
-  </router-view>
+  </div>
 </template>

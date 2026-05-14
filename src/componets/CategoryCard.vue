@@ -32,17 +32,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Plus } from 'lucide-vue-next'
 import { getCategories, newCategory } from '@/api'
 
 const showAddCategoryForm = ref(false)
+const categories = ref([])
+const newTitle = ref('')
 
 defineEmits(['category-id'])
 
-const { data } = await getCategories()
-const categories = ref(data ?? [])
-const newTitle = ref('')
+onMounted(async () => {
+  const { data } = await getCategories()
+  categories.value = data ?? []
+})
 
 async function addNewCategory() {
   const { data } = await newCategory({ title: newTitle.value })

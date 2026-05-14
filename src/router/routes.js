@@ -1,11 +1,11 @@
-import Home from '@/componets/Home.vue'
+import HomePage from '@/componets/HomePage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '@/componets/LoginPage.vue'
 import CreateAccount from '@/componets/CreateAccount.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', component: Home, meta: { requiresAuth: true } },
+    { path: '/', component: HomePage, meta: { requiresAuth: true } },
     { path: '/login', name: 'Login', component: LoginPage },
     { path: '/signup', name: 'Create Account', component: CreateAccount, meta: { guest: true } },
   ],
