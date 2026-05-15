@@ -29,6 +29,10 @@ if (updatedArticle) {
   watch(updatedArticle, (article) => {
     if (!article) return
 
+    if (!Array.isArray(favorites.value)) {
+      favorites.value = []
+    }
+
     const index = favorites.value.findIndex((f) => f.id === article.id)
 
     if (article.is_favorite) {
